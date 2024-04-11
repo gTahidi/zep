@@ -1,8 +1,3 @@
-## Kubernetes Deployment Configuration YAML
-# Zep Server
-# Note: This is designed for development/test deployments
-# Will need to be customized and hardened with additional security, deployment configurations for production use cases
-##
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -109,35 +104,30 @@ spec:
           ports:
             - containerPort: 8000
           envFrom:
-          # To create a config map from your local config.yaml file, run:
-          # kubectl create configmap zep-config --from-file=config.yaml -n zep
             - configMapRef:
                 name: zep-config
-          # To create a config map from your local .env file, run:
-          # kubectl create configmap dotenv --from-file=.env -n zep
             - configMapRef:
                 name: dotenv
-           Uncomment to enable pulling config from the configmap
-           env:
-             - name: ZEP_STORE_POSTGRES_DSN
+          env:
+            - name: ZEP_STORE_POSTGRES_DSN
               value: postgres://postgres:postgres@zep-postgres:5432/postgres?sslmode=disable
-             - name: ZEP_NLP_SERVER_URL
-               value: http://zep-nlp:5557
-             - name: ZEP_OPENAI_API_KEY
-               valueFrom:
-                 secretKeyRef:
-                   name: zep-openai-api-key
-                 key: ZEP_OPENAI_API_KEY
+            - name: ZEP_NLP_SERVER_URL
+              value: http://zep-nlp:5557
+            - name: ZEP_OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: zep-openai-api-key
+                  key: ZEP_OPENAI_API_KEY
             - name: AZURE_OPENAI_SUBSCRIPTION_KEY
               valueFrom:
-                 secretKeyRef:
+                secretKeyRef:
                   name: azure-openai-secret
-                   key: subscription-key
+                  key: subscription-key
             - name: AZURE_OPENAI_ENDPOINT
               valueFrom:
                 secretKeyRef:
-                   name: azure-openai-secret
-                   key: endpoint
+                  name: azure-openai-secret
+                  key: endpoint
           readinessProbe:
             httpGet:
               port: 8000

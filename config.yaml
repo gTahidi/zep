@@ -17,7 +17,7 @@ llm:
   #   embedding_deployment: "text-embedding-ada-002-customname"
   # Use only with an alternate OpenAI-compatible API endpoint
   openai_endpoint:
-  openai_org_id:
+  openai_org_id: org-1ybnx0j5FZMLSioBPHKa8M7q
 nlp:
   server_url: "http://localhost:5557"
 memory:
@@ -27,10 +27,8 @@ extractors:
     embeddings:
       enabled: true
       chunk_size: 1000
-      dimensions: 384
-      service: "local"
-#      dimensions: 1536
-#      service: "openai"
+      dimensions: 1536  # Assuming you want to use the larger dimension size
+      service: "openai"
   messages:
     summarizer:
       enabled: true
@@ -38,18 +36,16 @@ extractors:
         enabled: true
       embeddings:
         enabled: true
-        dimensions: 384
-        service: "local"
+        dimensions: 1536  # Assuming you want to use the larger dimension size
+        service: "openai"
     entities:
       enabled: true
     intent:
       enabled: true
     embeddings:
       enabled: true
-      dimensions: 384
-      service: "local"
-#      dimensions: 1536
-#      service: "openai"
+      dimensions: 1536  # Assuming you want to use the larger dimension size
+      service: "openai"
 store:
   type: "postgres"
   postgres:
@@ -69,11 +65,11 @@ auth:
   required: false
   # Do not use this secret in production. The ZEP_AUTH_SECRET environment variable should be
   # set to a cryptographically secure secret. See the Zep docs for details.
-  secret: "do-not-use-this-secret-in-production"
+  secret: ZEP_AUTH_SECRET
 data:
   #  PurgeEvery is the period between hard deletes, in minutes.
   #  If set to 0 or undefined, hard deletes will not be performed.
-  purge_every: 60
+  purge_every: 120
 log:
   level: "info"
 opentelemetry:
