@@ -76,7 +76,7 @@ spec:
           resources:
             requests:
               memory: "1Gi"
-              cpu: "500m"
+              cpu: "250m"
             limits:
               memory: "2Gi"
               cpu: "1"
@@ -106,8 +106,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: zep-config
-            - configMapRef:
-                name: dotenv
+            - secretRef:
+                name: zep-secrets
           env:
             - name: ZEP_STORE_POSTGRES_DSN
               value: postgres://postgres:postgres@zep-postgres:5432/postgres?sslmode=disable
@@ -118,16 +118,6 @@ spec:
                 secretKeyRef:
                   name: zep-openai-api-key
                   key: ZEP_OPENAI_API_KEY
-            - name: AZURE_OPENAI_SUBSCRIPTION_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: azure-openai-secret
-                  key: subscription-key
-            - name: AZURE_OPENAI_ENDPOINT
-              valueFrom:
-                secretKeyRef:
-                  name: azure-openai-secret
-                  key: endpoint
           readinessProbe:
             httpGet:
               port: 8000
