@@ -8,6 +8,10 @@ kubectl apply -f zep-k8-deployment.yaml
 kubectl create configmap zep-config --from-file=config.yaml
 kubectl describe pod zep-7949f9799b-z47jt -n zep
 kubectl logs zep-7949f9799b-z47jt -n zep
+kubectl apply --dry-run=client -f zep-k8-deployment.yaml
+
+kubectl rollout restart deployment zep -n zep
+
 
 
 
@@ -28,3 +32,17 @@ zep-79768fb877-zssz6
 
 
 az aks disable-addons --addons monitoring --name zepmemory --resource-group gtahidi_group
+ kubectl port-forward svc/zep-postgres-76dff5f44f-bs7wd 5432:5432
+
+ kclear
+ kubectl apply -f zep-config.yaml
+kubectl get configmaps
+kubectl apply -f zep-config.yaml
+
+
+#Connecting to the postgres store via bash
+kubectl exec -it -n zep $(kubectl get pods -n zep -l app=zep-postgres -o jsonpath="{.items[0].metadata.name}") -- bash
+#Accessing the postgres environment
+psql -U postgres -d postgres
+
+kubectl logs -n zep $(kubectl get pods -n zep -l app=zep-postgres -o jsonpath="{.items[0].metadata.name}")
